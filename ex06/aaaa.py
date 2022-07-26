@@ -1,6 +1,6 @@
 import tkinter
-import tkinter.messagebox as tkm
 import math
+import tkinter.messagebox as tkm
 import pygame as pg
 
 NUM_H_BLOCK = 10  # ブロッックの数（横方向)
@@ -11,17 +11,17 @@ COLOR_BLOCK = "blue"  # ブロックの色
 
 HEIGHT_SPACE = 300  # 縦方向の空きスペース
 
-WIDTH_PADDLE = 250  # パドルの幅
+WIDTH_PADDLE = 280  # パドルの幅
 HEIGHT_PADDLE = 20  # パドルの高さ
 Y_PADDLE = 50  # パドルの下方向からの位置
 COLOR_PADDLE = "green"  # パドルの色
 
 RADIUS_BALL = 10  # ボールの半径
 COLOR_BALL = "red"  # ボールの色
-NUM_BALL = 12  # ボールの数
+NUM_BALL = 15  # ボールの数
 
 UPDATE_TIME = 20  # 更新間隔（ms）
-count = 0
+count = 0 # 得点
 
 music_wavs=["sound/game.wav","sound/gameover.wav","sound/gameclear.wav"]  #音データ
 
@@ -72,20 +72,6 @@ class Ball:
             # 横方向に反射
             self.reflectH()
             self.x = self.x_max
-
-        # if self.y < self.y_min:
-        #     # 上の壁とぶつかった
-
-        #     # 縦方向に反射
-        #     self.reflectV()
-        #     self.y = self.y_min
-
-        #if self.y > self.y_max:
-            # 下の壁とぶつかった
-
-            # 縦方向に反射
-            #self.reflectV()
-            #self.y = self.y_max
 
 
     def turn(self, angle):
@@ -183,15 +169,13 @@ class Ball:
         elif is_collideH:
             # 横方向のみ当たったので横方向に反射
             self.reflectH()
-
-
+    #川畑
     def exists1(self):
         '''画面内に残っているかどうかの確認'''
-        return False if 0 > self.y  else True
-
-
+        return False if 0 > self.y else True 
+    #川畑
     def exists2(self):
-        return True if  self.y < self.y_max  else False
+        return True if self.y < self.y_max else False
 
 
 class Paddle:
@@ -222,6 +206,7 @@ class Paddle:
 
 
 class Block:
+
     def __init__(self, x, y, width, height):
         '''ブロック作成'''
 
@@ -254,17 +239,22 @@ class Breakout:
         self.createObjects()
         self.drawFigures()
         self.setEvents()
-
-
-    def count_time(self): #得点と生存時間を描画する
+    
+    #川畑
+    def count_time(self): #得点と生存時間を表示する関数
         time = pg.time.get_ticks()
         time = time / 1000
+<<<<<<< HEAD
         times = time * 30
         score = int(count * 100 - times)
+=======
+        times = time * 10
+        score = int(count * 100 - times*1.5)
+>>>>>>> upstream/main
         tkm.showinfo("score",f"あなたの得点は{score}点です")
         tkm.showinfo("time",f"生存時間は{time}秒です")
 
-
+    #芹澤
     def sound(self,n):    #音データから引数のデータを取り出し音を流す関数
         pg.mixer.init(frequency = 44100)
         pg.mixer.music.load(music_wavs[n])
@@ -314,27 +304,30 @@ class Breakout:
         delete_balls2 = []
         for ball in self.balls:
             if not ball.exists1():
-                # 外に出たボールは削除対象リストに入れる
+                # 外に出たボールは削除対象リストに入れる(上側)
                 delete_balls.append(ball)
-
             elif not ball.exists2():
+                #（下側）
                 delete_balls2.append(ball)
                 count += 1
+        
 
         for ball in delete_balls:
-            # 削除対象リストのボールを削除
+            # 削除対象リストのボールを削除(上側)
             self.delete(ball)
             self.canvas.create_text(
                 self.width // 2, self.height // 2,
                 text="GAME OVER",
                 font=("", 40),
-                fill="blue"
+                fill="red"
             )
             self.is_playing = False
             self.sound(1)
             self.count_time()
-
+        
+        
         for ball in delete_balls2:
+            #(下側)
             self.delete(ball)
 
         self.collision()
@@ -410,12 +403,13 @@ class Breakout:
 
                 # 当たってたらballを反射
                 ball.reflect(self.paddle)
-
-
+    
+    #川畑
     def result(self):
         '''ゲームの結果を表示する'''
 
 
+<<<<<<< HEAD
         # if len(self.blocks) == 0:
         #     self.canvas.create_text(
         #         self.width // 2, self.height // 2,
@@ -427,6 +421,8 @@ class Breakout:
         #     self.is_playing = False
 
 
+=======
+>>>>>>> upstream/main
         if len(self.balls) == 0:
             self.canvas.create_text(
                 self.width // 2, self.height // 2,
@@ -438,13 +434,11 @@ class Breakout:
             self.is_playing = False
             self.count_time()
 
-
     def setEvents(self):
         '''イベント受付設定'''
 
         self.canvas.bind("<ButtonPress>", self.start)
         self.canvas.bind("<Motion>", self.motion)
-
 
     def createWidgets(self):
         '''必要なウィジェットを作成'''
