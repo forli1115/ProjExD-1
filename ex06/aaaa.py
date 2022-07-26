@@ -259,7 +259,7 @@ class Breakout:
     def count_time(self): #得点と生存時間を描画する
         time = pg.time.get_ticks()
         time = time / 1000
-        times = time * 10
+        times = time * 30
         score = int(count * 100 - times)
         tkm.showinfo("score",f"あなたの得点は{score}点です")
         tkm.showinfo("time",f"生存時間は{time}秒です")
@@ -331,6 +331,7 @@ class Breakout:
                 fill="blue"
             )
             self.is_playing = False
+            self.sound(1)
             self.count_time()
 
         for ball in delete_balls2:
@@ -415,15 +416,15 @@ class Breakout:
         '''ゲームの結果を表示する'''
 
 
-        if len(self.blocks) == 0:
-            self.canvas.create_text(
-                self.width // 2, self.height // 2,
-                text="GAME CLEAR",
-                font=("", 40),
-                fill="blue"
-            )
-            self.sound(2)
-            self.is_playing = False
+        # if len(self.blocks) == 0:
+        #     self.canvas.create_text(
+        #         self.width // 2, self.height // 2,
+        #         text="GAME CLEAR",
+        #         font=("", 40),
+        #         fill="blue"
+        #     )
+        #     self.sound(2)
+        #     self.is_playing = False
 
 
         if len(self.balls) == 0:
@@ -433,7 +434,7 @@ class Breakout:
                 font=("", 40),
                 fill="red"
             )
-            self.sound(1)
+            self.sound(2)
             self.is_playing = False
             self.count_time()
 
